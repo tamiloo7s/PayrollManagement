@@ -1,0 +1,84 @@
+package com.example.payrollmanagement
+
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.example.payrollmanagement.presentation.view.createview.CreatePayrollScreen
+import com.example.payrollmanagement.presentation.view.createview.CreatePayrollViewModel
+import com.example.payrollmanagement.presentation.view.detailview.PayrollDetailScreen
+import com.example.payrollmanagement.presentation.view.detailview.PayrollDetailViewModel
+import com.example.payrollmanagement.presentation.view.listview.PayrollListScreen
+import com.example.payrollmanagement.presentation.view.listview.PayrollListViewModel
+
+sealed class Screen(val route: String) {
+
+    object List : Screen("list")
+    object Create : Screen("create")
+    object Detail : Screen("detail")
+
+}
+
+@Composable
+fun PayrollNavigation(
+    modifier: Modifier = Modifier,
+    navController: NavHostController = rememberNavController()
+) {
+
+    val context = LocalContext.current
+    val app = context.applicationContext as PayrollApplication
+
+    val repository = app.repository
+
+    NavHost(
+        navController = navController,
+        startDestination = Screen.List.route,
+        modifier = modifier
+    ) {
+        composable(route = Screen.List.route) {
+            val listViewModel: PayrollListViewModel = viewModel(
+                factory = PayrollListViewModel.Factory(repository)
+            )
+            PayrollListScreen(
+                viewModel = listViewModel,
+                onCreatePayrollClick = { navController.navigate(Screen.Create.route) },
+                onPayrollClick = { id -> navController.navigate("${Screen.Detail.route}/$id") },
+                onEditPayrollClick = { id -> navController.navigate("${Screen.Create.route}?payrollId=$id")}
+            )
+        }
+
+        composable(
+            route = "${Screen.Create.route}?payrollId={payrollId}",
+            arguments = listOf(navArgument("payrollId") { type = NavType.LongType; defaultValue = -1L })
+        ) { backStackEntry ->
+            val payrollId = backStackEntry.arguments?.getLong("payrollId")?:0L
+            val createViewModel: CreatePayrollViewModel = viewModel(
+                factory = CreatePayrollViewModel.Factory(repository,payrollId)
+            )
+            CreatePayrollScreen(
+                viewModel = createViewModel,
+                onBackClick = { navController.popBackStack() }
+            )
+        }
+
+        composable(
+            route = "${Screen.Detail.route}/{payrollId}",
+            arguments = listOf(navArgument("payrollId") { type = NavType.LongType })
+        ) { backStackEntry ->
+            val payrollId = backStackEntry.arguments?.getLong("payrollId") ?: 0L
+            val payrollDetailViewModel: PayrollDetailViewModel = viewModel(
+                factory = PayrollDetailViewModel.Factory(repository,payrollId)
+            )
+            PayrollDetailScreen(
+                viewModel = payrollDetailViewModel,
+                onBackClick = { navController.popBackStack() }
+            )
+        }
+    }
+}
