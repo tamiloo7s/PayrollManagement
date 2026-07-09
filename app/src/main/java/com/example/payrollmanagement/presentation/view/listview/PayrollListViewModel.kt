@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlin.jvm.Throws
 
 class PayrollListViewModel(private val repository: PayrollRepository): ViewModel() {
 
@@ -25,12 +26,11 @@ class PayrollListViewModel(private val repository: PayrollRepository): ViewModel
         }
     }
 
-    class Factory(private val repository: PayrollRepository) : ViewModelProvider.Factory {
+    class Factory(private val repository: PayrollRepository): ViewModelProvider.Factory{
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(PayrollListViewModel::class.java)) {
+            if(modelClass.isAssignableFrom(PayrollListViewModel::class.java))
                 return PayrollListViewModel(repository) as T
-            }
             throw IllegalArgumentException("Unknown ViewModel class")
         }
     }

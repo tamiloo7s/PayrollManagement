@@ -118,7 +118,7 @@ fun PayrollListScreen(
                 )
             }
         },
-        containerColor = Color.Transparent,
+        containerColor = MaterialTheme.colorScheme.background,
         content = { innerpadding ->
             Box(
                 modifier = Modifier
@@ -344,7 +344,7 @@ private fun HeaderCard(
 
             Card(
                 modifier = Modifier
-                    .fillMaxWidth(0.5F)
+                    .fillMaxWidth(0.3F)
                     .border(
                         width = 1.dp,
                         color = IndigoLight,
@@ -455,7 +455,7 @@ fun PayrollItemRow(
             .clickable(onClick = onClick),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
+            containerColor = Color.White
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
     ) {
@@ -500,7 +500,7 @@ fun PayrollItemRow(
                 Spacer(modifier = Modifier.height(5.dp))
 
                 Text(
-                    text = "Total: ${payroll.totalNet.toCurrency()}",
+                    text = "Total Net: ${payroll.totalNet.toCurrency()}",
                     fontSize = 13.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = Purple40,

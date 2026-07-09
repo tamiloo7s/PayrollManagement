@@ -1,7 +1,10 @@
 package com.example.payrollmanagement
 
+import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.example.payrollmanagement.presentation.view.createview.CreatePayrollScreen
+import com.example.payrollmanagement.presentation.view.createview.CreatePayrollViewModel
 
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -21,4 +24,23 @@ class ExampleInstrumentedTest {
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
         assertEquals("com.example.payrollmanagement", appContext.packageName)
     }
+}
+
+class listScreenTest{
+    @get:Test
+    val composeRule = createComposeRule()
+
+    fun test(){
+
+        val vm : CreatePayrollViewModel = mock()
+
+        composeRule.setContent {
+            CreatePayrollScreen() {
+
+            }
+        }
+
+    }
+
+
 }

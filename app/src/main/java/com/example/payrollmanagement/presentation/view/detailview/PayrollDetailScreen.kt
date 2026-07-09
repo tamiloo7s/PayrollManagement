@@ -50,6 +50,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.payrollmanagement.domain.model.Employee
 import com.example.payrollmanagement.domain.model.Payroll
+import com.example.payrollmanagement.ui.theme.IndigoLight
 import com.example.payrollmanagement.ui.theme.Purple40
 import com.example.payrollmanagement.ui.theme.RoseBg
 import com.example.payrollmanagement.ui.theme.RoseBorder
@@ -211,7 +212,9 @@ private fun EmployeeDetailRow(
                         text = employee.name,
                         fontWeight = FontWeight.Bold,
                         fontSize = 14.sp,
-                        color = Color.Black
+                        color = Color.Black,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
@@ -330,13 +333,12 @@ private fun HeaderInfoCard(
 
             Card(
                 modifier = Modifier
-                    .fillMaxWidth(0.5F)
-//                    .border(
-//                        width = 1.dp,
-//                        color = IndigoLight,
-//                        shape = RoundedCornerShape(24.dp)
-//                    )//change
-                ,
+                    .fillMaxWidth(0.3F)
+                    .border(
+                        width = 1.dp,
+                        color = IndigoLight,
+                        shape = RoundedCornerShape(24.dp)
+                    ),
                 shape = RoundedCornerShape(24.dp),
                 colors = CardDefaults.cardColors(
                     containerColor = Color.White

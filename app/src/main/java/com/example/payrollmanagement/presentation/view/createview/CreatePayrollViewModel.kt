@@ -152,7 +152,6 @@ class CreatePayrollViewModel(
 
         viewModelScope.launch {
             if(isEditmode) {
-                println("11111 ${_employee.value}")
                 val existing = _existingPayroll.value
                 val updatedPayroll = Payroll(
                     id = payrollId,

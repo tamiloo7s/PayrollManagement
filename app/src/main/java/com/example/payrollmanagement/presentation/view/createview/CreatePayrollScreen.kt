@@ -172,7 +172,11 @@ fun CreatePayrollScreen(
 
                             OutlinedTextField(
                                 value = name,
-                                onValueChange = { viewModel.employeeName.value = it },
+                                onValueChange = {
+                                    if(it.length < 30) {
+                                        viewModel.employeeName.value = it
+                                    }
+                                                },
                                 label = { Text("Full Name") },
                                 leadingIcon = {
                                     Icon(
@@ -206,7 +210,11 @@ fun CreatePayrollScreen(
 
                             OutlinedTextField(
                                 value = wages,
-                                onValueChange = { viewModel.employeeWages.value = it },
+                                onValueChange = {
+                                    if(it.length < 12) {
+                                        viewModel.employeeWages.value = it
+                                    }
+                                                },
                                 label = { Text("Base Wages") },
                                 leadingIcon = {
                                     Icon(
@@ -313,7 +321,7 @@ fun CreatePayrollScreen(
                                         )
                                         Spacer(modifier = Modifier.width(8.dp))
                                         Text(
-                                            text = if (editingIndex != null) "Update Employee" else "Add to Batch",
+                                            text = if (editingIndex != null) "Update Employee" else "Add Employee",
                                             fontWeight = FontWeight.Bold,
                                             fontSize = 15.sp
                                         )
