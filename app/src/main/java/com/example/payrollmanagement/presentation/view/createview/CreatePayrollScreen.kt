@@ -347,6 +347,10 @@ fun CreatePayrollScreen(
                         isEditing = editingIndex == index
                     )
                 }
+
+                item {
+                    Spacer(Modifier.height(10.dp))
+                }
             }
             BottomActionBoard(
                 employee = employees,
@@ -371,8 +375,9 @@ private fun DraftEmployeeItem(
         shape = RoundedCornerShape(12.dp),
         border = if (isEditing) BorderStroke(2.dp, MaterialTheme.colorScheme.primary) else null,
         colors = CardDefaults.cardColors(
-            containerColor = if (isEditing) MaterialTheme.colorScheme.primary.copy(alpha = 0.05f) else MaterialTheme.colorScheme.surface.copy(alpha = 0.5f)
-        )
+            containerColor = Color.White
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
     ) {
         Row(
             modifier = Modifier

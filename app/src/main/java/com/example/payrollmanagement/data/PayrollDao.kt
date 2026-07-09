@@ -22,10 +22,20 @@ interface PayrollDao {
     @Query("DELETE FROM payrolls WHERE id = :id")
     fun deletePayrollById(id:Long)
 
+    @Query("DELETE FROM employees WHERE payrollId = :payrollId")
+    fun deleteEmployeesByPayrollId(payrollId: Long)
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPayroll(payroll: payrollEntity): Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertEmployee(employees:List<EmployeeEntity>)
+
+    @Transaction
+    suspend fun updatePayrollwithEmployee(payroll: payrollEntity,employees: List<EmployeeEntity>){
+        insertPayroll(payroll)
+        deleteEmployeesByPayrollId(payroll.id)
+        insertEmployee(employees)
+    }
 
 }

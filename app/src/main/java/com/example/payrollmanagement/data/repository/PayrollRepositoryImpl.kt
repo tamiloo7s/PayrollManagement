@@ -47,7 +47,19 @@ class PayrollRepositoryImpl(private val payrollDao: PayrollDao): PayrollReposito
     }
 
     override suspend fun updatePayroll(payroll: Payroll) {
-
+        val payrollEntity = payrollEntity(
+            id = payroll.id,
+            creationDate = payroll.creationDate.time
+        )
+        val employeeEntities = payroll.employees.map { employee ->
+            EmployeeEntity(
+                payrollId = payroll.id,
+                name = employee.name,
+                wages = employee.wages,
+                isExempt = employee.isExempt
+            )
+        }
+        payrollDao.updatePayrollwithEmployee(payrollEntity,employeeEntities)
     }
 
     override suspend fun deletePayroll(id: Long) {

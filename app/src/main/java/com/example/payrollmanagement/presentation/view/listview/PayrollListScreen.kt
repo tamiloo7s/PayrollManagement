@@ -1,5 +1,7 @@
 package com.example.payrollmanagement.presentation.view.listview
 
+import android.annotation.SuppressLint
+import android.app.Activity
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
@@ -51,6 +53,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -66,6 +69,7 @@ import com.example.payrollmanagement.ui.theme.RoseBg
 import com.example.payrollmanagement.ui.theme.RoseBorder
 import com.example.payrollmanagement.ui.theme.RoseText
 
+@SuppressLint("ContextCastToActivity")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PayrollListScreen(
@@ -75,9 +79,13 @@ fun PayrollListScreen(
     onEditPayrollClick: (Long) -> Unit,
 ) {
 
+
     val payrolls by viewModel.payrolls.collectAsState()
     var payrollToDelete by remember { mutableStateOf<Payroll?>(null) }
     var exitPopup by remember { mutableStateOf(false) }
+
+    val activity = LocalContext.current as? Activity
+
 
     Scaffold(
         topBar = {
@@ -162,7 +170,7 @@ fun PayrollListScreen(
     payrollToDelete?.let { payroll ->
         AlertDialog(
             onDismissRequest = { payrollToDelete = null },
-            title = { Text("Delete Payroll") },
+            title = { Text(text = "Delete Payroll") },
             text = {
                 Text("Are you sure you want to delete the payroll")
             },
@@ -174,14 +182,15 @@ fun PayrollListScreen(
                     },
                     modifier = Modifier.testTag("confirm_delete")
                 ) {
-                    Text("Delete", color = MaterialTheme.colorScheme.error)
+                    Text("Delete", color = RoseText)
                 }
             },
             dismissButton = {
                 TextButton(onClick = { payrollToDelete = null }) {
-                    Text("Cancel")
+                    Text("Cancel",color = Color.Black)
                 }
-            }
+            },
+            containerColor = Color.White
         )
     }
 
@@ -224,11 +233,15 @@ fun PayrollListScreen(
                                 contentColor = Color.White
                             ),
                             onClick = {
-
+                                activity?.finish()
+                                activity?.finishAffinity()
                             },
                             modifier = Modifier.testTag("exit_button")
                         ) {
-                            Text("Yes")
+                            Text(text = "Yes",
+                                color = Color.White,
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Bold)
                         }
 
                         TextButton(
@@ -238,7 +251,11 @@ fun PayrollListScreen(
                                 Color.Black
                             ),
                             onClick = { exitPopup = false }) {
-                            Text("No")
+                            Text(text = "No",
+                                color = Color.Black,
+                                fontSize = 18.sp,
+                                fontWeight = FontWeight.Bold
+                            )
                         }
 
                     }
@@ -248,7 +265,6 @@ fun PayrollListScreen(
 
             }
         )
-
     }
 
     BackHandler {

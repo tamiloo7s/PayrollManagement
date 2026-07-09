@@ -15,5 +15,5 @@ val IndigoLight = Color.Black//Color(0xFFEEF2FF)
 
 val RoseBg = Color.Black//Color(0xFFFFF1F2)
 val RoseBorder = Color(0xFFFFE4E6)
-val RoseText = Color.White//Color(0xFFE11D48)//change
+val RoseText = Color(0xFFE11D48)
 
