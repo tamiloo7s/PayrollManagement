@@ -24,8 +24,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForwardIos
 import androidx.compose.material.icons.filled.AccountBalanceWallet
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Calculate
+import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.DeleteOutline
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.MonetizationOn
 import androidx.compose.material.icons.filled.Payments
 import androidx.compose.material.icons.filled.People
 import androidx.compose.material.icons.filled.ReceiptLong
@@ -187,7 +190,7 @@ fun PayrollListScreen(
             },
             dismissButton = {
                 TextButton(onClick = { payrollToDelete = null }) {
-                    Text("Cancel",color = Color.Black)
+                    Text("Cancel", color = Color.Black)
                 }
             },
             containerColor = Color.White
@@ -238,10 +241,12 @@ fun PayrollListScreen(
                             },
                             modifier = Modifier.testTag("exit_button")
                         ) {
-                            Text(text = "Yes",
+                            Text(
+                                text = "Yes",
                                 color = Color.White,
                                 fontSize = 18.sp,
-                                fontWeight = FontWeight.Bold)
+                                fontWeight = FontWeight.Bold
+                            )
                         }
 
                         TextButton(
@@ -251,7 +256,8 @@ fun PayrollListScreen(
                                 Color.Black
                             ),
                             onClick = { exitPopup = false }) {
-                            Text(text = "No",
+                            Text(
+                                text = "No",
                                 color = Color.Black,
                                 fontSize = 18.sp,
                                 fontWeight = FontWeight.Bold
@@ -292,7 +298,7 @@ private fun HeaderCard(
                 .fillMaxWidth(),
             shape = RoundedCornerShape(24.dp),
             colors = CardDefaults.cardColors(
-                containerColor = Color.Black//Purple40//change
+                containerColor = Purple40
             )
         ) {
             Column(
@@ -344,13 +350,12 @@ private fun HeaderCard(
 
             Card(
                 modifier = Modifier
-                    .fillMaxWidth(0.3F)
+                    .fillMaxWidth(0.4F)
                     .border(
                         width = 1.dp,
                         color = IndigoLight,
                         shape = RoundedCornerShape(24.dp)
-                    )
-                ,
+                    ),
                 shape = RoundedCornerShape(24.dp),
                 colors = CardDefaults.cardColors(
                     containerColor = Color.White
@@ -368,13 +373,13 @@ private fun HeaderCard(
                         imageVector = Icons.Default.People,
                         contentDescription = null,
                         tint = Color.Black,
-                        modifier = Modifier.size(20.dp)
+                        modifier = Modifier.size(25.dp)
                     )
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
                         text = "${totalEmployees}",
                         color = Color.Black,
-                        fontSize = 16.sp,
+                        fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
@@ -382,7 +387,7 @@ private fun HeaderCard(
                     Text(
                         text = "STAFF",
                         color = Color.Gray,
-                        fontSize = 9.sp,
+                        fontSize = 12.sp,
                         fontWeight = FontWeight.Bold,
                         letterSpacing = 0.5.sp
                     )
@@ -416,13 +421,13 @@ private fun HeaderCard(
                         imageVector = Icons.Default.AccountBalanceWallet,
                         contentDescription = null,
                         tint = RoseText,
-                        modifier = Modifier.size(20.dp)
+                        modifier = Modifier.size(25.dp)
                     )
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
                         text = "${totalTaxes.toCurrency()}",
                         color = RoseText,
-                        fontSize = 14.sp,
+                        fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
@@ -430,7 +435,7 @@ private fun HeaderCard(
                     Text(
                         text = "TAX",
                         color = RoseText.copy(alpha = 0.7f),
-                        fontSize = 9.sp,
+                        fontSize = 12.sp,
                         fontWeight = FontWeight.Bold,
                         letterSpacing = 0.5.sp
                     )
@@ -467,12 +472,24 @@ fun PayrollItemRow(
         ) {
             Column(modifier = Modifier.weight(1f)) {
 
-                Text(
-                    text = payroll.creationDate.toFormattedString(),
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 15.sp,
-                    color = Color.Black
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        Icons.Default.CalendarMonth,
+                        contentDescription = "employee_count",
+                        tint = Color.DarkGray,
+                        modifier = Modifier
+                            .padding(end = 10.dp)
+                            .size(20.dp)
+                    )
+                    Text(
+                        text = payroll.creationDate.toFormattedString(),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 15.sp,
+                        color = Color.Black
+                    )
+                }
 
                 Spacer(modifier = Modifier.height(5.dp))
 
@@ -491,22 +508,35 @@ fun PayrollItemRow(
 
                     Text(
                         text = "${payroll.employees.size}",
-                        fontSize = 17.sp,
-                        color = Color.DarkGray
+                        fontSize = 15.sp,
+                        color = Color.Black,
+                        fontWeight = FontWeight.Bold
                     )
 
                 }
 
                 Spacer(modifier = Modifier.height(5.dp))
 
-                Text(
-                    text = "Total Net: ${payroll.totalNet.toCurrency()}",
-                    fontSize = 13.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = Purple40,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        Icons.Default.MonetizationOn,
+                        contentDescription = "employee_count",
+                        tint = Purple40,
+                        modifier = Modifier
+                            .padding(end = 10.dp)
+                            .size(20.dp)
+                    )
+                    Text(
+                        text = "Total Net: ${payroll.totalNet.toCurrency()}",
+                        fontSize = 13.sp,
+                        fontWeight = FontWeight.SemiBold,
+                        color = Purple40,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
 
             }
 
@@ -523,7 +553,7 @@ fun PayrollItemRow(
 
             IconButton(
                 onClick = onDeleteClick,
-                modifier = Modifier.testTag("")
+                modifier = Modifier.testTag("delete_button_${payroll.id}")
             ) {
                 Icon(
                     imageVector = Icons.Default.DeleteOutline,
@@ -570,11 +600,13 @@ fun EmptyPayrollView(
             color = Color.Black
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(15.dp))
 
         TextButton(
             onClick = onCreateClick,
-            modifier = Modifier.testTag("empty_state_create_button")
+            modifier = Modifier.testTag("empty_state_create_button"),
+            border = BorderStroke(1.dp, Color.Black),
+            shape = RoundedCornerShape(50.dp)
         ) {
             Text(
                 text = "+ Create First Payroll",

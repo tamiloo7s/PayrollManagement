@@ -86,6 +86,28 @@ class ExampleUnitTest {
 
     }
 
+    @Test
+    fun Check_Payroll_Tax(){
+
+        val company1 = Payroll(
+            employees = listOf(
+                Employee(
+                    name = "Employee_1",
+                    wages = 9876.0,
+                    isExempt = false
+                ),
+                Employee(
+                    name = "Employee_2",
+                    wages = 5678944365.0,
+                    isExempt = false
+                )
+            )
+        )
+
+        assertEquals(283947712.05,company1.totalTaxes,0.001)
+
+    }
+
 
 
 

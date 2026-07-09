@@ -190,17 +190,43 @@ private fun EmployeeDetailRow(
             ) {
                 val (bgCol, fgCol) = getInitialsColors(employee.name)
 
-                Surface(
-                    shape = CircleShape,
-                    color = bgCol,
-                    modifier = Modifier.size(40.dp)
-                ) {
-                    Box(contentAlignment = Alignment.Center) {
-                        Icon(
-                            imageVector = Icons.Default.Person,
-                            contentDescription = "PersonIcon",
-                            tint = fgCol,
-                            modifier = Modifier.size(24.dp)
+                val taxlable = when {
+                    employee.isExempt -> "EXEMPT"
+                    employee.taxes > 0.0 -> "5% TAX"
+                    else -> "NO TAX"
+
+                }
+
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ){
+                    Surface(
+                        shape = CircleShape,
+                        color = bgCol,
+                        modifier = Modifier.size(40.dp)
+                    ) {
+                        Box(contentAlignment = Alignment.Center) {
+                            Icon(
+                                imageVector = Icons.Default.Person,
+                                contentDescription = "PersonIcon",
+                                tint = fgCol,
+                                modifier = Modifier.size(24.dp)
+                            )
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Surface(
+                        shape = RoundedCornerShape(6.dp),
+                        color = RoseBg
+                    ) {
+                        Text(
+                            text = "${taxlable}",
+                            fontSize = 9.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = RoseText,
+                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
                         )
                     }
                 }
@@ -236,32 +262,20 @@ private fun EmployeeDetailRow(
                 modifier = Modifier.weight(0.9f)
             ) {
                 Text(
+                    text = "NET PAY",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp,
+                    color = Color.Black
+                )
+
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
                     text = "${employee.netWages.toCurrency()}",
                     fontWeight = FontWeight.Bold,
                     fontSize = 14.sp,
                     color = Color.Black
                 )
-                Spacer(modifier = Modifier.height(4.dp))
 
-                val taxlable = when {
-                    employee.isExempt -> "EXEMPT"
-                    employee.taxes > 0.0 -> "5% TAX"
-                    else -> "NO TAX"
-
-                }
-
-                Surface(
-                    shape = RoundedCornerShape(6.dp),
-                    color = RoseBg
-                ) {
-                    Text(
-                        text = "${taxlable}",
-                        fontSize = 9.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = RoseText,
-                        modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
-                    )
-                }
             }
         }
     }
@@ -281,7 +295,7 @@ private fun HeaderInfoCard(
                 .fillMaxWidth(),
             shape = RoundedCornerShape(24.dp),
             colors = CardDefaults.cardColors(
-                containerColor = Color.Black//Purple40//change
+                containerColor = Purple40
             )
         ) {
             Column(
@@ -356,13 +370,13 @@ private fun HeaderInfoCard(
                         imageVector = Icons.Default.People,
                         contentDescription = null,
                         tint = Color.Black,
-                        modifier = Modifier.size(20.dp)
+                        modifier = Modifier.size(25.dp)
                     )
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
                         text = "${payroll.employees.size}",
                         color = Color.Black,
-                        fontSize = 16.sp,
+                        fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
@@ -370,7 +384,7 @@ private fun HeaderInfoCard(
                     Text(
                         text = "STAFF",
                         color = Color.Gray,
-                        fontSize = 9.sp,
+                        fontSize = 12.sp,
                         fontWeight = FontWeight.Bold,
                         letterSpacing = 0.5.sp
                     )
@@ -404,13 +418,13 @@ private fun HeaderInfoCard(
                         imageVector = Icons.Default.AccountBalanceWallet,
                         contentDescription = null,
                         tint = RoseText,
-                        modifier = Modifier.size(20.dp)
+                        modifier = Modifier.size(25.dp)
                     )
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
                         text = "${payroll.totalTaxes.toCurrency()}",
                         color = RoseText,
-                        fontSize = 14.sp,
+                        fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
@@ -418,7 +432,7 @@ private fun HeaderInfoCard(
                     Text(
                         text = "TAX",
                         color = RoseText.copy(alpha = 0.7f),
-                        fontSize = 9.sp,
+                        fontSize = 12.sp,
                         fontWeight = FontWeight.Bold,
                         letterSpacing = 0.5.sp
                     )
@@ -500,7 +514,7 @@ private fun PayrollBottomSheet(
                     text = "Total Net",
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color.Black
+                    color = Purple40
                 )
                 Text(
                     text = totalNet.toCurrency(),

@@ -65,6 +65,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.payrollmanagement.domain.model.Employee
 import com.example.payrollmanagement.presentation.view.detailview.toCurrency
+import com.example.payrollmanagement.ui.theme.Purple40
 import kotlinx.coroutines.flow.collectLatest
 
 
@@ -95,10 +96,6 @@ fun CreatePayrollScreen(
             if(wagesDouble > 1000.0 && !isExempt)
                 wagesDouble*0.05 else 0.0
         }
-    }
-
-    val liveNet by remember(wagesDouble,liveTaxes) {
-        derivedStateOf { wagesDouble - liveTaxes }
     }
 
     LaunchedEffect(Unit) {
@@ -189,7 +186,7 @@ fun CreatePayrollScreen(
                                     nameError?.let {
                                         Text(
                                             it,
-                                            color = MaterialTheme.colorScheme.error//change
+                                            color = MaterialTheme.colorScheme.error
                                         )
                                     }
                                 },
@@ -206,6 +203,7 @@ fun CreatePayrollScreen(
                                 ),
                                 modifier = Modifier
                                     .fillMaxWidth()
+                                    .testTag("employee_name_textfield")
                             )
 
                             OutlinedTextField(
@@ -244,6 +242,7 @@ fun CreatePayrollScreen(
                                 ),
                                 modifier = Modifier
                                     .fillMaxWidth()
+                                    .testTag("wages_textfield")
                             )
 
                             Row(
@@ -270,7 +269,7 @@ fun CreatePayrollScreen(
                                             alpha = 0.3f
                                         )
                                     ),
-                                    modifier = Modifier
+                                    modifier = Modifier.testTag("switch_button")
                                 )
                             }
 
@@ -303,13 +302,14 @@ fun CreatePayrollScreen(
                                         viewModel.addEmployee()
                                     },
                                     colors = ButtonDefaults.buttonColors(
-                                        containerColor = MaterialTheme.colorScheme.primary,
-                                        contentColor = MaterialTheme.colorScheme.onPrimary
+                                        containerColor = Purple40,
+                                        contentColor = Color.White
                                     ),
                                     shape = RoundedCornerShape(12.dp),
                                     modifier = Modifier
                                         .weight(1f)
                                         .height(48.dp)
+                                        .testTag("add_employee_button")
                                 ) {
                                     Row(
                                         verticalAlignment = Alignment.CenterVertically,
@@ -381,11 +381,10 @@ private fun DraftEmployeeItem(
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
-        border = if (isEditing) BorderStroke(2.dp, MaterialTheme.colorScheme.primary) else null,
+        border = BorderStroke(1.dp, if (isEditing) Purple40 else Color.LightGray),
         colors = CardDefaults.cardColors(
             containerColor = Color.White
-        ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+        )
     ) {
         Row(
             modifier = Modifier
@@ -393,20 +392,47 @@ private fun DraftEmployeeItem(
                 .padding(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Surface(
-                shape = CircleShape,
-                color = if (isEditing) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
-                modifier = Modifier.size(36.dp)
-            ) {
-                Box(
-                    contentAlignment = Alignment.Center) {
-                    Icon(
-                        imageVector = Icons.Default.Person,
-                        contentDescription = "PersonIcon",
-                        tint = if (isEditing) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(24.dp)
-                    )
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ){
+                Surface(
+                    shape = CircleShape,
+                    color = if (isEditing) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.primary.copy(
+                        alpha = 0.1f
+                    ),
+                    modifier = Modifier.size(36.dp)
+                ) {
+                    Box(
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Person,
+                            contentDescription = "PersonIcon",
+                            tint = if (isEditing) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(24.dp)
+                        )
+                    }
                 }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                if (employee.isExempt) {
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Surface(
+                        shape = RoundedCornerShape(4.dp),
+                        color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.15f),
+                        modifier = Modifier.padding(horizontal = 2.dp)
+                    ) {
+                        Text(
+                            text = "EXEMPT",
+                            fontSize = 9.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.tertiary,
+                            modifier = Modifier.padding(horizontal = 4.dp, vertical = 2.dp)
+                        )
+                    }
+                }
+
             }
 
             Spacer(modifier = Modifier.width(12.dp))
@@ -418,38 +444,6 @@ private fun DraftEmployeeItem(
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 14.sp
                     )
-                    if (employee.isExempt) {
-                        Spacer(modifier = Modifier.width(6.dp))
-                        Surface(
-                            shape = RoundedCornerShape(4.dp),
-                            color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.15f),
-                            modifier = Modifier.padding(horizontal = 2.dp)
-                        ) {
-                            Text(
-                                text = "EXEMPT",
-                                fontSize = 9.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.tertiary,
-                                modifier = Modifier.padding(horizontal = 4.dp, vertical = 2.dp)
-                            )
-                        }
-                    }
-                    if (isEditing) {
-                        Spacer(modifier = Modifier.width(6.dp))
-                        Surface(
-                            shape = RoundedCornerShape(4.dp),
-                            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.15f),
-                            modifier = Modifier.padding(horizontal = 2.dp)
-                        ) {
-                            Text(
-                                text = "EDITING",
-                                fontSize = 9.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.padding(horizontal = 4.dp, vertical = 2.dp)
-                            )
-                        }
-                    }
                 }
                 Spacer(modifier = Modifier.height(4.dp))
                 Column(
@@ -459,7 +453,7 @@ private fun DraftEmployeeItem(
                         fontSize = 12.sp,
                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                     )
-                    if (employee.taxes > 0.0) {//change
+                    if (employee.taxes > 0.0) {
                         Text(
                             text = "Tax: ${employee.taxes.toCurrency()}",
                             fontSize = 12.sp,
@@ -477,7 +471,7 @@ private fun DraftEmployeeItem(
 
             IconButton(
                 onClick = onEdit,
-                modifier = Modifier.size(36.dp)
+                modifier = Modifier.size(36.dp).testTag("employee_edit")
             ) {
                 Icon(
                     imageVector = Icons.Default.Edit,
@@ -495,7 +489,7 @@ private fun DraftEmployeeItem(
                     imageVector = Icons.Default.Close,
                     contentDescription = "Delete Draft Employee",
                     tint = MaterialTheme.colorScheme.error.copy(alpha = 0.8f),
-                    modifier = Modifier.size(18.dp)
+                    modifier = Modifier.size(18.dp).testTag("employee_delete")
                 )
             }
         }
@@ -541,12 +535,13 @@ fun BottomActionBoard(
                 Text(
                     text = "Gross Pay",
                     fontSize = 13.sp,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
+                    color = Color.Black
                 )
                 Text(
                     text = "${totalWages.toCurrency()}",
                     fontSize = 13.sp,
-                    fontWeight = FontWeight.Medium
+                    fontWeight = FontWeight.Medium,
+                    color = Color.Black
                 )
             }
 
@@ -577,7 +572,8 @@ fun BottomActionBoard(
                 Text(
                     text = "Total Net Pay",
                     fontSize = 15.sp,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    color = Purple40
                 )
                 Text(
                     text = totalNet.toCurrency(),
@@ -593,8 +589,8 @@ fun BottomActionBoard(
                 onClick = onSaveClick,
                 enabled = employee.isNotEmpty(),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    contentColor = MaterialTheme.colorScheme.onPrimary,
+                    containerColor = Purple40,
+                    contentColor = Color.White,
                     disabledContainerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f),
                     disabledContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
                 ),
