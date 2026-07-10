@@ -1,6 +1,7 @@
 package com.example.payrollmanagement
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -16,8 +17,12 @@ import com.example.payrollmanagement.presentation.view.detailview.PayrollDetailS
 import com.example.payrollmanagement.presentation.view.detailview.PayrollDetailViewModel
 import com.example.payrollmanagement.presentation.view.listview.PayrollListScreen
 import com.example.payrollmanagement.presentation.view.listview.PayrollListViewModel
+import com.example.payrollmanagement.presentation.view.splashview.SplashScreen
+import kotlinx.coroutines.delay
 
 sealed class Screen(val route: String) {
+
+    object Splash : Screen("splash")
 
     object List : Screen("list")
     object Create : Screen("create")
@@ -38,9 +43,18 @@ fun PayrollNavigation(
 
     NavHost(
         navController = navController,
-        startDestination = Screen.List.route,
+        startDestination = Screen.Splash.route,
         modifier = modifier
     ) {
+
+        composable(route = Screen.Splash.route){
+            LaunchedEffect(Unit) {
+                delay(3000)
+                navController.navigate(Screen.List.route)
+            }
+            SplashScreen()
+        }
+
         composable(route = Screen.List.route) {
             val listViewModel: PayrollListViewModel = viewModel(
                 factory = PayrollListViewModel.Factory(repository)

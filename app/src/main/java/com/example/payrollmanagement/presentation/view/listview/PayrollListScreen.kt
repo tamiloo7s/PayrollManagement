@@ -68,6 +68,7 @@ import com.example.payrollmanagement.presentation.view.detailview.toCurrency
 import com.example.payrollmanagement.presentation.view.detailview.toFormattedString
 import com.example.payrollmanagement.ui.theme.IndigoLight
 import com.example.payrollmanagement.ui.theme.Purple40
+import com.example.payrollmanagement.ui.theme.Purple80
 import com.example.payrollmanagement.ui.theme.RoseBg
 import com.example.payrollmanagement.ui.theme.RoseBorder
 import com.example.payrollmanagement.ui.theme.RoseText
@@ -299,7 +300,8 @@ private fun HeaderCard(
             shape = RoundedCornerShape(24.dp),
             colors = CardDefaults.cardColors(
                 containerColor = Purple40
-            )
+            ),
+            border = BorderStroke(1.dp,Color.Black)
         ) {
             Column(
                 modifier = Modifier
@@ -308,18 +310,19 @@ private fun HeaderCard(
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    modifier = Modifier.padding(bottom = 10.dp)
                 ) {
                     Icon(
                         imageVector = Icons.Default.Payments,
                         contentDescription = null,
-                        tint = Color.White.copy(alpha = 0.85f),
-                        modifier = Modifier.size(18.dp)
+                        tint = Color.White,
+                        modifier = Modifier.size(25.dp)
                     )
                     Text(
                         text = "TOTAL NET PAY",
-                        color = Color.White.copy(alpha = 0.85f),
-                        fontSize = 10.sp,
+                        color = Color.White,
+                        fontSize = 15.sp,
                         fontWeight = FontWeight.Bold,
                         letterSpacing = 0.5.sp
                     )
@@ -329,7 +332,7 @@ private fun HeaderCard(
                     Text(
                         text = totalPayout.toCurrency(),
                         color = Color.White,
-                        fontSize = 28.sp,
+                        fontSize = 30.sp,
                         fontWeight = FontWeight.Bold,
                         letterSpacing = (-0.5).sp,
                         maxLines = 1,
@@ -350,16 +353,12 @@ private fun HeaderCard(
 
             Card(
                 modifier = Modifier
-                    .fillMaxWidth(0.4F)
-                    .border(
-                        width = 1.dp,
-                        color = IndigoLight,
-                        shape = RoundedCornerShape(24.dp)
-                    ),
+                    .fillMaxWidth(0.4F),
                 shape = RoundedCornerShape(24.dp),
                 colors = CardDefaults.cardColors(
                     containerColor = Color.White
                 ),
+                border = BorderStroke(width = 1.dp,color = Color.DarkGray),
                 elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
             ) {
                 Column(
@@ -398,16 +397,12 @@ private fun HeaderCard(
 
             Card(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .border(
-                        width = 1.dp,
-                        color = RoseBorder,
-                        shape = RoundedCornerShape(24.dp)
-                    ),
+                    .fillMaxWidth(),
                 shape = RoundedCornerShape(24.dp),
                 colors = CardDefaults.cardColors(
                     containerColor = RoseBg
                 ),
+                border = BorderStroke(1.dp,RoseText),
                 elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
             ) {
                 Column(
@@ -462,7 +457,8 @@ fun PayrollItemRow(
         colors = CardDefaults.cardColors(
             containerColor = Color.White
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
+        border = BorderStroke(1.dp,Color.LightGray)
     ) {
         Row(
             modifier = Modifier
@@ -547,7 +543,7 @@ fun PayrollItemRow(
                 Icon(
                     imageVector = Icons.Default.Edit,
                     contentDescription = "Edit Payroll",
-                    tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.8f)
+                    tint = Color.Black
                 )
             }
 
@@ -558,14 +554,14 @@ fun PayrollItemRow(
                 Icon(
                     imageVector = Icons.Default.DeleteOutline,
                     contentDescription = "Delete Payroll",
-                    tint = MaterialTheme.colorScheme.error.copy(alpha = 0.8f)
+                    tint = RoseText
                 )
             }
 
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowForwardIos,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f),
+                tint = Color.Black,
                 modifier = Modifier.size(14.dp)
             )
         }

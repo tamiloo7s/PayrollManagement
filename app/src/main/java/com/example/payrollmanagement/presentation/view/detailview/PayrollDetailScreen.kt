@@ -1,5 +1,6 @@
 package com.example.payrollmanagement.presentation.view.detailview
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -161,6 +162,7 @@ fun PayrollDetailScreen(
             }
         }
     }
+
 }
 
 
@@ -175,6 +177,7 @@ private fun EmployeeDetailRow(
         colors = CardDefaults.cardColors(
             containerColor = Color.White
         ),
+        border = BorderStroke(1.dp,Color.LightGray),
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
     ) {
         Row(
@@ -296,7 +299,8 @@ private fun HeaderInfoCard(
             shape = RoundedCornerShape(24.dp),
             colors = CardDefaults.cardColors(
                 containerColor = Purple40
-            )
+            ),
+            border = BorderStroke(1.dp,Color.Black)
         ) {
             Column(
                 modifier = Modifier
@@ -305,18 +309,19 @@ private fun HeaderInfoCard(
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    modifier = Modifier.padding(bottom = 10.dp)
                 ) {
                     Icon(
                         imageVector = Icons.Default.Payments,
                         contentDescription = null,
                         tint = Color.White.copy(alpha = 0.85f),
-                        modifier = Modifier.size(18.dp)
+                        modifier = Modifier.size(25.dp).testTag("payment_icon")
                     )
                     Text(
                         text = "TOTAL NET PAY",
                         color = Color.White.copy(alpha = 0.85f),
-                        fontSize = 10.sp,
+                        fontSize = 15.sp,
                         fontWeight = FontWeight.Bold,
                         letterSpacing = 0.5.sp
                     )
@@ -326,7 +331,7 @@ private fun HeaderInfoCard(
                     Text(
                         text = payroll.totalNet.toCurrency(),
                         color = Color.White,
-                        fontSize = 28.sp,
+                        fontSize = 30.sp,
                         fontWeight = FontWeight.Bold,
                         letterSpacing = (-0.5).sp,
                         maxLines = 1,
@@ -347,16 +352,12 @@ private fun HeaderInfoCard(
 
             Card(
                 modifier = Modifier
-                    .fillMaxWidth(0.3F)
-                    .border(
-                        width = 1.dp,
-                        color = IndigoLight,
-                        shape = RoundedCornerShape(24.dp)
-                    ),
+                    .fillMaxWidth(0.4F),
                 shape = RoundedCornerShape(24.dp),
                 colors = CardDefaults.cardColors(
                     containerColor = Color.White
                 ),
+                border = BorderStroke(1.dp,Color.DarkGray),
                 elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
             ) {
                 Column(
@@ -370,7 +371,7 @@ private fun HeaderInfoCard(
                         imageVector = Icons.Default.People,
                         contentDescription = null,
                         tint = Color.Black,
-                        modifier = Modifier.size(25.dp)
+                        modifier = Modifier.size(25.dp).testTag("people_icon")
                     )
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(
@@ -395,16 +396,12 @@ private fun HeaderInfoCard(
 
             Card(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .border(
-                        width = 1.dp,
-                        color = RoseBorder,
-                        shape = RoundedCornerShape(24.dp)
-                    ),
+                    .fillMaxWidth(),
                 shape = RoundedCornerShape(24.dp),
                 colors = CardDefaults.cardColors(
                     containerColor = RoseBg
                 ),
+                border = BorderStroke(1.dp,RoseText),
                 elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
             ) {
                 Column(
@@ -418,7 +415,7 @@ private fun HeaderInfoCard(
                         imageVector = Icons.Default.AccountBalanceWallet,
                         contentDescription = null,
                         tint = RoseText,
-                        modifier = Modifier.size(25.dp)
+                        modifier = Modifier.size(25.dp).testTag("wallet_icon")
                     )
                     Spacer(modifier = Modifier.height(2.dp))
                     Text(

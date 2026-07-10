@@ -164,7 +164,7 @@ fun CreatePayrollScreen(
                                 text = if (editingIndex != null) "Edit Employee Details" else "Add Employee",
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 16.sp,
-                                color = MaterialTheme.colorScheme.primary
+                                color = Color.Black
                             )
 
                             OutlinedTextField(
@@ -196,7 +196,7 @@ fun CreatePayrollScreen(
                                     imeAction = ImeAction.Next
                                 ),
                                 colors = OutlinedTextFieldDefaults.colors(
-                                    focusedBorderColor = MaterialTheme.colorScheme.primary,
+                                    focusedBorderColor = Purple40,
                                     unfocusedBorderColor = MaterialTheme.colorScheme.onSurface.copy(
                                         alpha = 0.15f
                                     )
@@ -235,7 +235,7 @@ fun CreatePayrollScreen(
                                     imeAction = ImeAction.Done
                                 ),
                                 colors = OutlinedTextFieldDefaults.colors(
-                                    focusedBorderColor = MaterialTheme.colorScheme.primary,
+                                    focusedBorderColor = Purple40,
                                     unfocusedBorderColor = MaterialTheme.colorScheme.onSurface.copy(
                                         alpha = 0.15f
                                     )
@@ -256,7 +256,8 @@ fun CreatePayrollScreen(
                                     Text(
                                         text = "Tax Exempt Staff",
                                         fontWeight = FontWeight.SemiBold,
-                                        fontSize = 14.sp
+                                        fontSize = 14.sp,
+                                        color = Color.Black
                                     )
                                 }
 
@@ -264,7 +265,7 @@ fun CreatePayrollScreen(
                                     checked = isExempt,
                                     onCheckedChange = { viewModel.employeeIsExempt.value = it },
                                     colors = SwitchDefaults.colors(
-                                        checkedThumbColor = MaterialTheme.colorScheme.primary,
+                                        checkedThumbColor = Purple40,
                                         checkedTrackColor = MaterialTheme.colorScheme.primary.copy(
                                             alpha = 0.3f
                                         )
@@ -464,7 +465,7 @@ private fun DraftEmployeeItem(
                         text = "Net: ${employee.netWages.toCurrency()}",
                         fontSize = 12.sp,
                         fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.primary
+                        color = Purple40
                     )
                 }
             }
@@ -483,7 +484,7 @@ private fun DraftEmployeeItem(
 
             IconButton(
                 onClick = onDelete,
-                modifier = Modifier.size(36.dp)
+                modifier = Modifier.size(36.dp).testTag("employee_delete")
             ) {
                 Icon(
                     imageVector = Icons.Default.Close,
@@ -579,7 +580,7 @@ fun BottomActionBoard(
                     text = totalNet.toCurrency(),
                     fontSize = 18.sp,
                     fontWeight = FontWeight.ExtraBold,
-                    color = MaterialTheme.colorScheme.primary
+                    color = Purple40
                 )
             }
 
@@ -598,6 +599,7 @@ fun BottomActionBoard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(52.dp)
+                    .testTag("submit_button")
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,

@@ -6,6 +6,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -147,39 +148,6 @@ class PayrollListScreenTest {
 
 }
 
-class FakePayrollRepository : PayrollRepository {
-
-    private val payrolls = MutableStateFlow<List<Payroll>>(emptyList())
-    private var nextId = 1L
-
-    override fun getAllPayroll(): Flow<List<Payroll>> = payrolls
-
-    override fun getPayrollById(id: Long): Flow<Payroll?> {
-        return payrolls.map { list ->
-            list.find { it.id == id }
-        }
-    }
-
-    override suspend fun createPayroll(payroll: Payroll): Long {
-        val id = if (payroll.id == 0L) nextId++ else payroll.id
-
-        payrolls.value = payrolls.value + payroll.copy(id = id)
-
-        return id
-    }
-
-    override suspend fun updatePayroll(payroll: Payroll) {
-        payrolls.value = payrolls.value.map {
-            if (it.id == payroll.id) payroll else it
-        }
-    }
-
-    override suspend fun deletePayroll(id: Long) {
-        payrolls.value = payrolls.value.filterNot {
-            it.id == id
-        }
-    }
-}
 
 class PayrollDetailScreenTest {
 
@@ -226,6 +194,13 @@ class PayrollDetailScreenTest {
             )
         }
 
+        composeRule.onNodeWithText("Payroll Details").assertExists()
+        composeRule.onNodeWithText("TOTAL NET PAY").assertExists()
+        composeRule.onNodeWithTag("payment_icon").assertExists()
+        composeRule.onNodeWithText("STAFF").assertExists()
+        composeRule.onNodeWithTag("people_icon").assertExists()
+        composeRule.onNodeWithText("TAX").assertExists()
+        composeRule.onNodeWithTag("wallet_icon").assertExists()
         composeRule.onNodeWithText("Staff List").assertExists()
         composeRule.onNodeWithText("NO TAX").assertExists()
         composeRule.onNodeWithText("EXEMPT").assertExists()
@@ -277,15 +252,88 @@ class CreatePayrollScreenTest {
             CreatePayrollScreen(viewModel, onBackClick = {})
         }
 
-        composeRule.onNodeWithTag("employee_name_textfield").performTextInput("Tamil")
-        composeRule.onNodeWithTag("wages_textfield").performTextInput("1000")
+        composeRule.onNodeWithTag("employee_name_textfield").performTextInput("Employee_1")
+        composeRule.onNodeWithTag("wages_textfield").performTextInput("1500")
         composeRule.onNodeWithTag("add_employee_button").performClick()
 
-        composeRule.onNodeWithText("Tamil").assertExists()
+        composeRule.onNodeWithTag("employee_name_textfield").performTextInput("Employee_2")
+        composeRule.onNodeWithTag("wages_textfield").performTextInput("100")
+        composeRule.onNodeWithTag("switch_button").performClick()
+        composeRule.onNodeWithTag("add_employee_button").performClick()
 
+        composeRule.onNodeWithTag("employee_name_textfield").performTextInput("Employee_3")
+        composeRule.onNodeWithTag("wages_textfield").performTextInput("5678")
+        composeRule.onNodeWithTag("switch_button").performClick()
+        composeRule.onNodeWithTag("add_employee_button").performClick()
+
+        composeRule.onNodeWithTag("submit_button").performClick()
+
+    }
+
+    @Test
+    fun Edit_Delete_Employee_Test(){
+        composeRule.setContent {
+            CreatePayrollScreen(viewModel, onBackClick = {})
+        }
+
+        composeRule.onNodeWithTag("employee_name_textfield").performTextInput("Employee_1")
+        composeRule.onNodeWithTag("employee_name_textfield").assertTextContains("Employee_1")
+        composeRule.onNodeWithTag("wages_textfield").performTextInput("5000")
+        composeRule.onNodeWithTag("wages_textfield").assertTextContains("5000")
+        composeRule.onNodeWithTag("add_employee_button").performClick()
+
+        composeRule.onNodeWithTag("employee_edit").performClick()
+        composeRule.waitForIdle()
+        composeRule.onNodeWithTag("employee_name_textfield").assertTextContains("Employee_1")
+        composeRule.onNodeWithTag("wages_textfield").assertTextContains("5000.0")
+
+        composeRule.onNodeWithTag("employee_name_textfield").performTextClearance()
+        composeRule.onNodeWithTag("employee_name_textfield").performTextInput("Employee_2")
+        composeRule.onNodeWithTag("employee_name_textfield").assertTextContains("Employee_2")
+        composeRule.onNodeWithTag("add_employee_button").performClick()
+
+        composeRule.onNodeWithText("Draft Staff List (${viewModel.employee.value.size})").assertExists()
+
+        composeRule.onNodeWithTag("employee_delete").performClick()
+        composeRule.onNodeWithText("Draft Staff List (${viewModel.employee.value.size})").assertDoesNotExist()
 
     }
 
 
 
+}
+
+
+class FakePayrollRepository : PayrollRepository {
+
+    private val payrolls = MutableStateFlow<List<Payroll>>(emptyList())
+    private var nextId = 1L
+
+    override fun getAllPayroll(): Flow<List<Payroll>> = payrolls
+
+    override fun getPayrollById(id: Long): Flow<Payroll?> {
+        return payrolls.map { list ->
+            list.find { it.id == id }
+        }
+    }
+
+    override suspend fun createPayroll(payroll: Payroll): Long {
+        val id = if (payroll.id == 0L) nextId++ else payroll.id
+
+        payrolls.value = payrolls.value + payroll.copy(id = id)
+
+        return id
+    }
+
+    override suspend fun updatePayroll(payroll: Payroll) {
+        payrolls.value = payrolls.value.map {
+            if (it.id == payroll.id) payroll else it
+        }
+    }
+
+    override suspend fun deletePayroll(id: Long) {
+        payrolls.value = payrolls.value.filterNot {
+            it.id == id
+        }
+    }
 }
