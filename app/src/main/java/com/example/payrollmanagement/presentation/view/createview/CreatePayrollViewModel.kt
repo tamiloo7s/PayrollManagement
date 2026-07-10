@@ -84,7 +84,7 @@ class CreatePayrollViewModel(
 
         var hasError = false
         if(name.isEmpty()){
-            nameError.value = "name cannot be empty"
+            nameError.value = "Name cannot be empty"
             hasError = true
         }
         else {
@@ -93,7 +93,7 @@ class CreatePayrollViewModel(
 
         val wages = wagesStr.toDoubleOrNull()
         if(wages == null || wages <= 0.0) {
-            wagesError.value = "Invalid"
+            wagesError.value = "Invalid wages"
             hasError = true
         }
         else {

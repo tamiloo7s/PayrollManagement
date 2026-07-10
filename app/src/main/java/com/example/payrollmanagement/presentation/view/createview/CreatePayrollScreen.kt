@@ -209,7 +209,7 @@ fun CreatePayrollScreen(
                             OutlinedTextField(
                                 value = wages,
                                 onValueChange = {
-                                    if(it.length < 12) {
+                                    if(it.length < 8) {
                                         viewModel.employeeWages.value = it
                                     }
                                                 },

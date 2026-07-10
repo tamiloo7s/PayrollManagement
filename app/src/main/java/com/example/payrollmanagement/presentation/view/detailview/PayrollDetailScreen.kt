@@ -23,6 +23,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AccountBalanceWallet
+import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Payments
 import androidx.compose.material.icons.filled.People
 import androidx.compose.material.icons.filled.Person
@@ -293,6 +294,28 @@ private fun HeaderInfoCard(
         modifier = Modifier
             .fillMaxWidth()
     ) {
+
+        Row(verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(10.dp)){
+
+            Icon(
+                Icons.Default.CalendarMonth,
+                contentDescription = "employee_count",
+                tint = Color.DarkGray,
+                modifier = Modifier
+                    .padding(end = 10.dp)
+                    .size(25.dp)
+            )
+
+            Text(
+                text = "${payroll.creationDate.toFormattedString()}",
+                color = Color.Black,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+                letterSpacing = 0.5.sp,
+                modifier = Modifier
+            )
+        }
         Card(
             modifier = Modifier
                 .fillMaxWidth(),

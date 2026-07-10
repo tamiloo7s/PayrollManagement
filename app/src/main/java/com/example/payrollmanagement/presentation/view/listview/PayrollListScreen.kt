@@ -29,6 +29,8 @@ import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.DeleteOutline
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.MonetizationOn
+import androidx.compose.material.icons.filled.Money
+import androidx.compose.material.icons.filled.Payment
 import androidx.compose.material.icons.filled.Payments
 import androidx.compose.material.icons.filled.People
 import androidx.compose.material.icons.filled.ReceiptLong
@@ -95,11 +97,18 @@ fun PayrollListScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(
-                        text = "Payroll List",
-                        color = Color.Black,
-                        fontWeight = FontWeight.Bold
-                    )
+                    Row(verticalAlignment = Alignment.CenterVertically){
+                        Icon(
+                            Icons.Default.Calculate,
+                            contentDescription = "",
+                            modifier = Modifier.padding(end = 10.dp).size(40.dp)
+                        )
+                        Text(
+                            text = "Payroll List",
+                            color = Color.Black,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Color.Transparent
@@ -176,7 +185,7 @@ fun PayrollListScreen(
             onDismissRequest = { payrollToDelete = null },
             title = { Text(text = "Delete Payroll") },
             text = {
-                Text("Are you sure you want to delete the payroll")
+                Text("Are you sure you want to delete this payroll")
             },
             confirmButton = {
                 TextButton(
