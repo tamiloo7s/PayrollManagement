@@ -87,16 +87,6 @@ fun CreatePayrollScreen(
 
     val employees by viewModel.employee.collectAsState()
     val editingIndex by viewModel.editingEmployeeIndex.collectAsState()
-    val wagesDouble by remember(wages) {
-        derivedStateOf { wages.toDoubleOrNull()?:0.0 }
-    }
-
-    val liveTaxes by remember(wagesDouble,isExempt) {
-        derivedStateOf {
-            if(wagesDouble > 1000.0 && !isExempt)
-                wagesDouble*0.05 else 0.0
-        }
-    }
 
     LaunchedEffect(Unit) {
         viewModel.savesuccess.collectLatest { succes ->
@@ -106,15 +96,13 @@ fun CreatePayrollScreen(
         }
     }
 
-    // val liveNet by remember(wages) {  }
-
     Scaffold(
         modifier = Modifier.windowInsetsPadding(WindowInsets.safeDrawing),
         topBar = {
             TopAppBar(
                 title = {
                     Text(
-                        text = if (false) "Edit Payroll Batch" else "New Payroll Batch",
+                        text = if (viewModel.isEditmode) "Edit Payroll Batch" else "New Payroll Batch",
                         fontWeight = FontWeight.Bold
                     )
                 },

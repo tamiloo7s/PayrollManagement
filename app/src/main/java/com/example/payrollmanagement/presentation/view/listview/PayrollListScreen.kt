@@ -547,7 +547,7 @@ fun PayrollItemRow(
 
             IconButton(
                 onClick = onEditClick,
-                modifier = Modifier.testTag("")
+                modifier = Modifier.testTag("edit_button_${payroll.id}")
             ) {
                 Icon(
                     imageVector = Icons.Default.Edit,

@@ -72,6 +72,18 @@ class EmployeeUnitTest {
 
     }
 
+    @Test
+    fun `maximum wages and taxes`(){
+        val employee_1 = Employee(
+            name = "employee_1",
+            wages = 99999999.0,
+            isExempt = false
+        )
+
+        assertEquals(99999999.0,employee_1.wages,0.00)
+        assertEquals(4999999.95,employee_1.taxes,0.00)
+    }
+
 
 
 

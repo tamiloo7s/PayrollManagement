@@ -9,6 +9,7 @@ import com.example.payrollmanagement.domain.model.Employee
 import com.example.payrollmanagement.domain.model.Payroll
 import com.example.payrollmanagement.presentation.view.listview.PayrollListScreen
 import com.example.payrollmanagement.presentation.view.listview.PayrollListViewModel
+import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.launch
 import org.junit.Rule
 import org.junit.Test
@@ -18,6 +19,7 @@ class PayrollListScreenTest {
 
     val repository = FakePayrollRepository()
     val viewModel = PayrollListViewModel(repository)
+
     @get:Rule
     val composeRule = createComposeRule()
 
@@ -110,6 +112,62 @@ class PayrollListScreenTest {
         composeRule.waitForIdle()
         composeRule.onNodeWithTag("confirm_delete").performClick()
         composeRule.onNodeWithText("Total Net: $6,000.00").assertDoesNotExist()
+
+    }
+
+
+    @Test
+    fun Edit_Delete_Payroll_Test() {
+
+        var editedPayrollId: Long? = null
+
+        viewModel.viewModelScope.launch {
+            repository.createPayroll(Payroll(
+                id = 1,
+                employees = listOf(
+                    Employee(
+                        id = 1,
+                        name = "Employee1",
+                        wages = 5000.0,
+                        isExempt = false
+                    ),
+                    Employee(
+                        id = 2,
+                        name = "Employee2",
+                        wages = 1000.0,
+                        isExempt = true
+                    )
+                )
+            ))
+        }
+
+        composeRule.setContent {
+            PayrollListScreen(
+                viewModel = viewModel,
+                onCreatePayrollClick = {},
+                onPayrollClick = {},
+                onEditPayrollClick = {
+                    editedPayrollId = it
+                }
+            )
+
+        }
+
+
+        composeRule.waitForIdle()
+
+        composeRule.onNodeWithTag("edit_button_1").performClick()
+        composeRule.runOnIdle {
+            assertEquals(1L, editedPayrollId)
+        }
+
+        composeRule.onNodeWithText("Total Net: $5,750.00").assertExists()
+
+        composeRule.onNodeWithTag("delete_button_1").performClick()
+        composeRule.waitForIdle()
+        composeRule.onNodeWithTag("confirm_delete").performClick()
+        composeRule.onNodeWithText("Total Net: $5,750.00").assertDoesNotExist()
+
 
     }
 
