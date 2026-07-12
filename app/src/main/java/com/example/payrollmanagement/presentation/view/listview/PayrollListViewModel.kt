@@ -5,19 +5,27 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.payrollmanagement.domain.model.Payroll
 import com.example.payrollmanagement.domain.repository.PayrollRepository
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlin.jvm.Throws
 
 class PayrollListViewModel(private val repository: PayrollRepository): ViewModel() {
 
-    val payrolls: StateFlow<List<Payroll>> = repository.getAllPayroll()
+    private val _isLoading = MutableStateFlow(true)
+    val isLoading: StateFlow<Boolean> = _isLoading
+
+    val payrolls = repository.getAllPayroll()
+        .onEach {
+            _isLoading.value = false
+        }
         .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = emptyList()
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5000),
+            emptyList()
         )
 
     fun deletePayroll(id:Long){

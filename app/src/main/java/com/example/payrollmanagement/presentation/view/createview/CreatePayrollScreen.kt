@@ -49,9 +49,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -62,10 +60,11 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.payrollmanagement.domain.model.Employee
 import com.example.payrollmanagement.presentation.view.detailview.toCurrency
 import com.example.payrollmanagement.ui.theme.Purple40
+import com.example.payrollmanagement.ui.theme.RoseBg
+import com.example.payrollmanagement.ui.theme.RoseText
 import kotlinx.coroutines.flow.collectLatest
 
 
@@ -103,7 +102,8 @@ fun CreatePayrollScreen(
                 title = {
                     Text(
                         text = if (viewModel.isEditmode) "Edit Payroll Batch" else "New Payroll Batch",
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black
                     )
                 },
                 navigationIcon = {
@@ -113,7 +113,8 @@ fun CreatePayrollScreen(
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Navigate Back"
+                            contentDescription = "Navigate Back",
+                            tint = Color.Black
                         )
                     }
                 },
@@ -122,7 +123,7 @@ fun CreatePayrollScreen(
                 )
             )
         },
-        containerColor = MaterialTheme.colorScheme.background
+        containerColor = Color.White
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -141,7 +142,7 @@ fun CreatePayrollScreen(
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(20.dp),
                         colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.surface
+                            containerColor = Color.White
                         )
                     ) {
                         Column(
@@ -174,7 +175,7 @@ fun CreatePayrollScreen(
                                     nameError?.let {
                                         Text(
                                             it,
-                                            color = MaterialTheme.colorScheme.error
+                                            color = RoseText
                                         )
                                     }
                                 },
@@ -185,9 +186,10 @@ fun CreatePayrollScreen(
                                 ),
                                 colors = OutlinedTextFieldDefaults.colors(
                                     focusedBorderColor = Purple40,
-                                    unfocusedBorderColor = MaterialTheme.colorScheme.onSurface.copy(
-                                        alpha = 0.15f
-                                    )
+                                    unfocusedBorderColor = Color.LightGray,
+                                    focusedTextColor = Color.Black,
+                                    unfocusedTextColor = Color.Black,
+                                    focusedLabelColor = Color.Black,
                                 ),
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -213,7 +215,7 @@ fun CreatePayrollScreen(
                                     wagesError?.let {
                                         Text(
                                             it,
-                                            color = MaterialTheme.colorScheme.error
+                                            color = RoseText
                                         )
                                     }
                                 },
@@ -224,9 +226,10 @@ fun CreatePayrollScreen(
                                 ),
                                 colors = OutlinedTextFieldDefaults.colors(
                                     focusedBorderColor = Purple40,
-                                    unfocusedBorderColor = MaterialTheme.colorScheme.onSurface.copy(
-                                        alpha = 0.15f
-                                    )
+                                    unfocusedBorderColor = Color.LightGray,
+                                    focusedTextColor = Color.Black,
+                                    unfocusedTextColor = Color.Black,
+                                    focusedLabelColor = Color.Black,
                                 ),
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -254,7 +257,7 @@ fun CreatePayrollScreen(
                                     onCheckedChange = { viewModel.employeeIsExempt.value = it },
                                     colors = SwitchDefaults.colors(
                                         checkedThumbColor = Purple40,
-                                        checkedTrackColor = MaterialTheme.colorScheme.primary.copy(
+                                        checkedTrackColor = Color.Gray.copy(
                                             alpha = 0.3f
                                         )
                                     ),
@@ -273,8 +276,8 @@ fun CreatePayrollScreen(
                                             viewModel.cancelEditingEmployee()
                                         },
                                         colors = ButtonDefaults.buttonColors(
-                                            containerColor = MaterialTheme.colorScheme.error.copy(alpha = 0.1f),
-                                            contentColor = MaterialTheme.colorScheme.error
+                                            containerColor = RoseBg,
+                                            contentColor = RoseText
                                         ),
                                         shape = RoundedCornerShape(12.dp),
                                         modifier = Modifier
@@ -327,7 +330,7 @@ fun CreatePayrollScreen(
                             text = "Draft Staff List (${employees.size})",
                             fontWeight = FontWeight.Bold,
                             fontSize = 15.sp,
-                            color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.8f)
+                            color = Color.Black
                         )
                     }
                 }
@@ -386,9 +389,7 @@ private fun DraftEmployeeItem(
             ){
                 Surface(
                     shape = CircleShape,
-                    color = if (isEditing) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.primary.copy(
-                        alpha = 0.1f
-                    ),
+                    color = if (isEditing) Color.DarkGray else Color.LightGray,
                     modifier = Modifier.size(36.dp)
                 ) {
                     Box(
@@ -397,7 +398,7 @@ private fun DraftEmployeeItem(
                         Icon(
                             imageVector = Icons.Default.Person,
                             contentDescription = "PersonIcon",
-                            tint = if (isEditing) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.primary,
+                            tint = if (isEditing) Color.White else Color.Black,
                             modifier = Modifier.size(24.dp)
                         )
                     }
@@ -440,13 +441,13 @@ private fun DraftEmployeeItem(
                     Text(
                         text = "Wages: ${employee.wages.toCurrency()}",
                         fontSize = 12.sp,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                        color = Color.LightGray
                     )
                     if (employee.taxes > 0.0) {
                         Text(
                             text = "Tax: ${employee.taxes.toCurrency()}",
                             fontSize = 12.sp,
-                            color = MaterialTheme.colorScheme.error.copy(alpha = 0.7f)
+                            color = RoseText
                         )
                     }
                     Text(
@@ -465,7 +466,7 @@ private fun DraftEmployeeItem(
                 Icon(
                     imageVector = Icons.Default.Edit,
                     contentDescription = "Edit Draft Employee",
-                    tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.8f),
+                    tint = Color.Gray,
                     modifier = Modifier.size(18.dp)
                 )
             }
@@ -477,7 +478,7 @@ private fun DraftEmployeeItem(
                 Icon(
                     imageVector = Icons.Default.Close,
                     contentDescription = "Delete Draft Employee",
-                    tint = MaterialTheme.colorScheme.error.copy(alpha = 0.8f),
+                    tint = RoseText,
                     modifier = Modifier.size(18.dp).testTag("employee_delete")
                 )
             }
@@ -500,8 +501,9 @@ fun BottomActionBoard(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
+            containerColor = Color.White
         ),
+        border = BorderStroke(1.dp,Color.LightGray),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
         Column(
@@ -514,7 +516,7 @@ fun BottomActionBoard(
                 text = "Calculation Summary",
                 fontWeight = FontWeight.Bold,
                 fontSize = 14.sp,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                color = Color.LightGray
             )
 
             Row(
@@ -542,13 +544,13 @@ fun BottomActionBoard(
                     Text(
                         text = "Total Tax",
                         fontSize = 13.sp,
-                        color = MaterialTheme.colorScheme.error.copy(alpha = 0.8f)
+                        color = RoseText
                     )
                     Text(
                         text = "- ${totalTaxes.toCurrency()}",
                         fontSize = 13.sp,
                         fontWeight = FontWeight.Medium,
-                        color = MaterialTheme.colorScheme.error
+                        color = RoseText
                     )
                 }
             }
@@ -580,8 +582,8 @@ fun BottomActionBoard(
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Purple40,
                     contentColor = Color.White,
-                    disabledContainerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f),
-                    disabledContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
+                    disabledContainerColor = Color.LightGray,
+                    disabledContentColor = Color.Black
                 ),
                 shape = RoundedCornerShape(16.dp),
                 modifier = Modifier

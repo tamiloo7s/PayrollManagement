@@ -80,7 +80,7 @@ fun PayrollDetailScreen(
                     Text(
                         text = "Payroll Details",
                         fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onBackground
+                        color = Color.Black
                     )
                 },
                 navigationIcon = {
@@ -91,7 +91,7 @@ fun PayrollDetailScreen(
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = "Navigate Back",
-                            tint = MaterialTheme.colorScheme.onBackground
+                            tint = Color.Black
                         )
                     }
                 },
@@ -100,7 +100,7 @@ fun PayrollDetailScreen(
                 )
             )
         },
-        containerColor = MaterialTheme.colorScheme.background
+        containerColor = Color.White
     ) { innerPadding ->
         Box(
             modifier = Modifier
@@ -136,7 +136,7 @@ fun PayrollDetailScreen(
                                 text = "Staff List",
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 16.sp,
-                                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.8f)
+                                color = Color.Black
                             )
                             Spacer(modifier = Modifier.height(4.dp))
                         }

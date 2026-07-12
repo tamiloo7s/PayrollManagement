@@ -59,7 +59,7 @@ class CreatePayrollViewModel(
             val employee = list[index]
             editingEmployeeIndex.value = index
             employeeName.value = employee.name
-            employeeWages.value = employee.wages.toString()
+            employeeWages.value = employee.wages.toInt().toString()
             employeeIsExempt.value = employee.isExempt
 
             nameError.value = null

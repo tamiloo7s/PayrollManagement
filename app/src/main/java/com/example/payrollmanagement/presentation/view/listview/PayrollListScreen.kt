@@ -38,6 +38,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -86,6 +87,7 @@ fun PayrollListScreen(
 ) {
 
 
+    val isLoading by viewModel.isLoading.collectAsState()
     val payrolls by viewModel.payrolls.collectAsState()
     var payrollToDelete by remember { mutableStateOf<Payroll?>(null) }
     var exitPopup by remember { mutableStateOf(false) }
@@ -101,6 +103,7 @@ fun PayrollListScreen(
                         Icon(
                             Icons.Default.Calculate,
                             contentDescription = "",
+                            tint = Color.Black,
                             modifier = Modifier.padding(end = 10.dp).size(40.dp)
                         )
                         Text(
@@ -131,18 +134,29 @@ fun PayrollListScreen(
                 )
             }
         },
-        containerColor = MaterialTheme.colorScheme.background,
+        containerColor = Color.White,
         content = { innerpadding ->
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerpadding)
             ) {
-                if (payrolls.isEmpty()) {
+                if(isLoading){
+
+                    Box(modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center){
+                        CircularProgressIndicator(
+                            color = Purple40
+                        )
+                    }
+
+                }
+                else if (payrolls.isEmpty()) {
                     EmptyPayrollView(
                         onCreateClick = onCreatePayrollClick
                     )
-                } else {
+                }
+                else {
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxSize()
@@ -183,9 +197,13 @@ fun PayrollListScreen(
     payrollToDelete?.let { payroll ->
         AlertDialog(
             onDismissRequest = { payrollToDelete = null },
-            title = { Text(text = "Delete Payroll") },
+            title = { Text(text = "Delete Payroll",
+                color = Color.Black,
+                fontWeight = FontWeight.Bold) },
             text = {
-                Text("Are you sure you want to delete this payroll")
+                Text(text = "Are you sure you want to delete this payroll",
+                    color = Color.Black,
+                    fontWeight = FontWeight.Bold)
             },
             confirmButton = {
                 TextButton(
@@ -277,6 +295,7 @@ fun PayrollListScreen(
                     }
                 }
             },
+            containerColor = Color.White,
             confirmButton = {
 
             }
