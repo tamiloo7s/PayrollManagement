@@ -12,6 +12,10 @@ A Payroll Management app built in Kotlin for Android. The app lets users create 
 * View payroll details: per-employee wages/taxes/net, plus a payroll summary
 * No internet connection required
 
+## Architecture
+
+This application is built using Clean Architecture together with the MVVM (Model–View–ViewModel) pattern to create a modular, maintainable, and scalable codebase.
+
 
 ## Requirements
 
@@ -49,6 +53,12 @@ git clone https://github.com/tamiloo7s/PayrollManagement.git
 
 ### Step 6: Run the app
 * Click the green Run ▶ button in the toolbar (or press Shift + F10). Android Studio builds the app and installs it on the selected emulator.
+
+## Future Improvements
+
+* Data export and reporting –> Allow payroll summaries to be exported as CSV for easier record keeping.
+* Search and filtering –> Add search, sorting, and filtering for payrolls and employees.
+* Dependency Injection – Integrate Hilt to simplify dependency management and improve testability.
 
 ## Screenshots
 
