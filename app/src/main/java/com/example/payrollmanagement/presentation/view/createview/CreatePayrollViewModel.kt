@@ -1,5 +1,6 @@
 package com.example.payrollmanagement.presentation.view.createview
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -7,6 +8,7 @@ import com.example.payrollmanagement.domain.model.Employee
 import com.example.payrollmanagement.domain.model.Payroll
 import com.example.payrollmanagement.domain.repository.PayrollRepository
 import com.example.payrollmanagement.presentation.view.listview.PayrollListViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -16,11 +18,16 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.util.Date
+import javax.inject.Inject
 
-class CreatePayrollViewModel(
+@HiltViewModel
+class CreatePayrollViewModel @Inject constructor(
     val repository: PayrollRepository,
-    val payrollId:Long = -1L
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
+
+    private val payrollId =
+        savedStateHandle.get<Long>("payrollId") ?: -1L
 
     val isEditmode = payrollId != -1L
     private val _existingPayroll = MutableStateFlow<Payroll?>(null)
@@ -171,17 +178,5 @@ class CreatePayrollViewModel(
 
         }
     }
-
-
-    class Factory(private val repository: PayrollRepository,private val payrollId:Long) : ViewModelProvider.Factory {
-        @Suppress("UNCHECKED_CAST")
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(CreatePayrollViewModel::class.java)) {
-                return CreatePayrollViewModel(repository,payrollId) as T
-            }
-            throw IllegalArgumentException("Unknown ViewModel class")
-        }
-    }
-
 
 }

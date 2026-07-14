@@ -50,6 +50,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.payrollmanagement.domain.model.Employee
 import com.example.payrollmanagement.domain.model.Payroll
 import com.example.payrollmanagement.ui.theme.IndigoLight
@@ -65,7 +66,7 @@ import java.util.Locale
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PayrollDetailScreen(
-    viewModel: PayrollDetailViewModel,
+    viewModel: PayrollDetailViewModel = hiltViewModel(),
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {

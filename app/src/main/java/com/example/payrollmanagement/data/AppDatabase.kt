@@ -10,24 +10,4 @@ abstract class AppDatabase: RoomDatabase() {
 
     abstract fun payrollDao(): PayrollDao
 
-    companion object {
-        @Volatile
-        var INSTANCE : AppDatabase ? = null
-
-        fun getInstance(context: Context): AppDatabase {
-            return INSTANCE?:synchronized(this){
-                val instance = Room.databaseBuilder(
-                    context.applicationContext,
-                    AppDatabase::class.java,
-                    "payroll_database",
-                ).allowMainThreadQueries()
-                    .fallbackToDestructiveMigration()
-                    .build()
-                INSTANCE = instance
-                instance
-            }
-
-        }
-    }
-
 }
