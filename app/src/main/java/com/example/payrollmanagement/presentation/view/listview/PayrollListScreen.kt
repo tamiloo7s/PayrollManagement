@@ -66,6 +66,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.payrollmanagement.domain.model.Payroll
 import com.example.payrollmanagement.presentation.view.detailview.toCurrency
 import com.example.payrollmanagement.presentation.view.detailview.toFormattedString
@@ -80,7 +81,7 @@ import com.example.payrollmanagement.ui.theme.RoseText
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PayrollListScreen(
-    viewModel: PayrollListViewModel,
+    viewModel : PayrollListViewModel = hiltViewModel(),
     onCreatePayrollClick: () -> Unit,
     onPayrollClick: (Long) -> Unit,
     onEditPayrollClick: (Long) -> Unit,

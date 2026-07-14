@@ -7,11 +7,12 @@ import com.example.payrollmanagement.data.payrollWithEmployee
 import com.example.payrollmanagement.domain.model.Employee
 import com.example.payrollmanagement.domain.model.Payroll
 import com.example.payrollmanagement.domain.repository.PayrollRepository
+import jakarta.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.util.Date
 
-class PayrollRepositoryImpl(private val payrollDao: PayrollDao): PayrollRepository {
+class PayrollRepositoryImpl @Inject constructor(private val payrollDao: PayrollDao): PayrollRepository {
     override fun getAllPayroll(): Flow<List<Payroll>> {
         return payrollDao.getAllPayrolls().map { entities ->
             entities.map { it.toDomain() }
@@ -30,8 +31,7 @@ class PayrollRepositoryImpl(private val payrollDao: PayrollDao): PayrollReposito
             creationDate = payroll.creationDate.time
         ))
 
-        val employeeEntities = payroll.employees.map {
-            employee ->
+        val employeeEntities = payroll.employees.map { employee ->
             EmployeeEntity(
                 payrollId = payrollId,
                 name = employee.name,
@@ -80,5 +80,4 @@ class PayrollRepositoryImpl(private val payrollDao: PayrollDao): PayrollReposito
             }
         )
     }
-
 }
