@@ -12,12 +12,14 @@ import com.example.payrollmanagement.ui.theme.PayrollManagementTheme
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.HiltAndroidApp
 
+var activity: MainActivity? = null
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            activity = this@MainActivity
             PayrollManagementTheme {
                 PayrollNavigation()
             }
@@ -27,3 +29,4 @@ class MainActivity : ComponentActivity() {
 
 @HiltAndroidApp
 class PayrollApplication: Application()
+

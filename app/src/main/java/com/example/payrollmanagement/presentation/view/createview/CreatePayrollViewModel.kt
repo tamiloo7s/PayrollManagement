@@ -2,12 +2,13 @@ package com.example.payrollmanagement.presentation.view.createview
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.payrollmanagement.domain.model.Employee
 import com.example.payrollmanagement.domain.model.Payroll
 import com.example.payrollmanagement.domain.repository.PayrollRepository
-import com.example.payrollmanagement.presentation.view.listview.PayrollListViewModel
+import com.example.payrollmanagement.domain.usecase.createUsecase
+import com.example.payrollmanagement.domain.usecase.getPayrollByIdUsecase
+import com.example.payrollmanagement.domain.usecase.updateUsecase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,19 +16,20 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
 class CreatePayrollViewModel @Inject constructor(
-    val repository: PayrollRepository,
-    savedStateHandle: SavedStateHandle
+    //val repository: PayrollRepository,
+    val createusecase: createUsecase,
+    val updateusecase: updateUsecase,
+    val getPayrollByIdUsecase: getPayrollByIdUsecase,
+    savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
-    private val payrollId =
-        savedStateHandle.get<Long>("payrollId") ?: -1L
+    private val payrollId = savedStateHandle.get<Long>("payrollId") ?: -1L
 
     val isEditmode = payrollId != -1L
     private val _existingPayroll = MutableStateFlow<Payroll?>(null)
@@ -49,13 +51,22 @@ class CreatePayrollViewModel @Inject constructor(
     init {
         if(isEditmode){
             viewModelScope.launch {
-                repository.getPayrollById(payrollId).collect{ payroll ->
+
+                getPayrollByIdUsecase(payrollId).collect{ payroll ->
                     if(payroll != null && _existingPayroll.value == null){
                         _existingPayroll.value = payroll
                         _employee.value = payroll.employees
                     }
 
                 }
+
+//                repository.getPayrollById(payrollId).collect{ payroll ->
+//                    if(payroll != null && _existingPayroll.value == null){
+//                        _existingPayroll.value = payroll
+//                        _employee.value = payroll.employees
+//                    }
+//
+//                }
             }
         }
     }
@@ -165,14 +176,16 @@ class CreatePayrollViewModel @Inject constructor(
                     creationDate = existing?.creationDate ?: Date(),
                     employees = _employee.value
                 )
-                repository.updatePayroll(updatedPayroll)
+                updateusecase(updatedPayroll)
+              //  repository.updatePayroll(updatedPayroll)
             }
             else {
                 val newPayroll = Payroll(
                     creationDate = Date(),
                     employees = _employee.value
                 )
-                repository.createPayroll(newPayroll)
+                createusecase(newPayroll)
+                //repository.createPayroll(newPayroll)
             }
             _savesuccess.emit(true)
 
