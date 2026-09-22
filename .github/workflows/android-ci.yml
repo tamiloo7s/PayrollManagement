@@ -10,6 +10,7 @@ jobs:
   lint:
     name: Lint / Format Check
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
@@ -28,3 +29,20 @@ jobs:
 
       - name: Run ktlint check
         run: ./gradlew ktlintCheck
+
+      - name: Notify Teams
+        if: always()
+        env:
+          TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
+        run: |
+          if [ "${{ job.status }}" = "success" ]; then
+            STATUS="✅ SUCCESS"
+          else
+            STATUS="❌ FAILED"
+          fi
+
+          curl -H "Content-Type: application/json" \
+            -d "{
+              \"text\": \"Android CI - $STATUS\n\nRepository: ${{ github.repository }}\nBranch: ${{ github.ref_name }}\nCommit: ${{ github.sha }}\nWorkflow: ${{ github.workflow }}\nRun: ${{ github.run_number }}\"
+            }" \
+            "$TEAMS_WEBHOOK_URL"
