@@ -3,6 +3,7 @@ package com.example.payrollmanagement
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.example.payrollmanagement.domain.model.Employee
 import com.example.payrollmanagement.domain.model.Payroll
@@ -18,7 +19,11 @@ class PayrollDetailScreenTest {
     val composeRule = createComposeRule()
 
     val repository = FakePayrollRepository()
-    val viewModel = PayrollDetailViewModel(repository,1)
+
+    private val savedStateHandle = SavedStateHandle(
+        mapOf("payrollId" to 1L)
+    )
+    val viewModel = PayrollDetailViewModel(repository,savedStateHandle)
 
 
     @Test

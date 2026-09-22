@@ -7,6 +7,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
+import androidx.lifecycle.SavedStateHandle
 import com.example.payrollmanagement.presentation.view.createview.CreatePayrollScreen
 import com.example.payrollmanagement.presentation.view.createview.CreatePayrollViewModel
 import org.junit.Rule
@@ -19,13 +20,17 @@ class CreatePayrollScreenTest {
 
     val repository = FakePayrollRepository()
 
-    val viewModel = CreatePayrollViewModel(repository)
+    private val savedStateHandle = SavedStateHandle(
+        mapOf("payrollId" to 1L)
+    )
+
+    val viewModel = CreatePayrollViewModel(repository,savedStateHandle)
 
     @Test
     fun Add_Employee_Test(){
 
         composeRule.setContent {
-            CreatePayrollScreen(viewModel) { }
+            CreatePayrollScreen() { }
         }
 
         composeRule.onNodeWithTag("employee_name_textfield").performTextInput("Harish")
@@ -48,7 +53,7 @@ class CreatePayrollScreenTest {
     fun Create_Payroll_Test(){
 
         composeRule.setContent {
-            CreatePayrollScreen(viewModel, onBackClick = {})
+            CreatePayrollScreen( onBackClick = {})
         }
 
         composeRule.onNodeWithTag("employee_name_textfield").performTextInput("Employee_1")
@@ -72,7 +77,7 @@ class CreatePayrollScreenTest {
     @Test
     fun Edit_Delete_Employee_Test(){
         composeRule.setContent {
-            CreatePayrollScreen(viewModel, onBackClick = {})
+            CreatePayrollScreen(onBackClick = {})
         }
 
         composeRule.onNodeWithTag("employee_name_textfield").performTextInput("Employee_1")

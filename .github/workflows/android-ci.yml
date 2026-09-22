@@ -1,0 +1,53 @@
+name: Android CI
+
+on:
+  push:
+    branches: [ ci-prep, main, workflow ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lint:
+    name: Lint / Format Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v5
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Run ktlint check
+        run: ./gradlew ktlintCheck
+
+      - name: Notify Teams
+        if: always()
+        env:
+          TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
+        run: |
+          if [ "${{ job.status }}" = "success" ]; then
+            STATUS="✅ SUCCESS"
+          else
+            STATUS="❌ FAILED"
+          fi
+
+          if [ -z "$TEAMS_WEBHOOK_URL" ]; then
+            echo "::error::TEAMS_WEBHOOK_URL secret is not set; skipping Teams notification"
+            exit 1
+          fi
+
+          curl -f -sS -H "Content-Type: application/json" \
+            -d "{
+              \"text\": \"Android CI - $STATUS\n\nRepository: ${{ github.repository }}\nBranch: ${{ github.ref_name }}\nCommit: ${{ github.sha }}\nWorkflow: ${{ github.workflow }}\nRun: ${{ github.run_number }}\"
+            }" \
+            "$TEAMS_WEBHOOK_URL"

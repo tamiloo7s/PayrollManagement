@@ -60,6 +60,10 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.payrollmanagement.activity
 import com.example.payrollmanagement.domain.model.Employee
 import com.example.payrollmanagement.presentation.view.detailview.toCurrency
 import com.example.payrollmanagement.ui.theme.Purple40
@@ -71,9 +75,10 @@ import kotlinx.coroutines.flow.collectLatest
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreatePayrollScreen(
-    viewModel: CreatePayrollViewModel,
     onBackClick: () -> Unit
 ) {
+
+    val viewModel : CreatePayrollViewModel = hiltViewModel()
 
     val name by viewModel.employeeName.collectAsState()
     val wages by viewModel.employeeWages.collectAsState()
