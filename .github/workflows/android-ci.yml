@@ -2,7 +2,7 @@ name: Android CI
 
 on:
   push:
-    branches: [ ci-prep, main ]
+    branches: [ ci-prep, main, workflow ]
   pull_request:
     branches: [ main ]
 
@@ -41,7 +41,12 @@ jobs:
             STATUS="❌ FAILED"
           fi
 
-          curl -H "Content-Type: application/json" \
+          if [ -z "$TEAMS_WEBHOOK_URL" ]; then
+            echo "::error::TEAMS_WEBHOOK_URL secret is not set; skipping Teams notification"
+            exit 1
+          fi
+
+          curl -f -sS -H "Content-Type: application/json" \
             -d "{
               \"text\": \"Android CI - $STATUS\n\nRepository: ${{ github.repository }}\nBranch: ${{ github.ref_name }}\nCommit: ${{ github.sha }}\nWorkflow: ${{ github.workflow }}\nRun: ${{ github.run_number }}\"
             }" \
